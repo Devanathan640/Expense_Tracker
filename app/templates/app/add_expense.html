@@ -1,0 +1,83 @@
+{% extends 'base.html'%}
+
+{%block title%} Add Expense {%endblock%}
+{%block data%}<h6 class="text-white">Date: {{today.0}}</h6>{%endblock%}
+
+{% block content%}
+<div class="container mt-4">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-3">
+                    <label for ="name" class="form-label">Name</label>
+                    <select class="form-select border border-dark-subtle" name="name" aria-label="Default select example" name="name" required>
+                        <option {%if edit_data%}selected{%else%}value=""{%endif%}>{%if edit_data%}{{edit_data.expenser_name.name}}{%else%}Select name{%endif%}</option>
+                        {% for nam in e_name%}
+                        <option value="{{nam.id}}" required>{{nam.name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+            <div class="col-3"> 
+                    <label for ="date" class="form-label">Date</label>
+                    <input type="date" class="form-control border border-dark-subtle" id="number"  value="" name="date" required>
+            </div>
+            <div class="col-3"> 
+                <label for ="item" class="form-label">Item Name</label>
+                <input type="text" class="form-control border border-dark-subtle" id="item"  value="{{edit_data.item}}" name="item" required>
+            </div>
+            <div class="col-3"> 
+                <label for ="price" class="form-label">Item Price</label>
+                <input type="number" class="form-control border border-dark-subtle" id="price"  value="{{edit_data.item_price}}" name="price" required>
+            </div>
+            <div class="row">
+                <div class="col-4 mt-4"> 
+                    <input type="submit" class="btn btn-info" value="Submit">
+            </div>
+            {%if messages%}
+            <div class="col-2 mt-4 text-danger " role="alert"> 
+                    {%for message in messages%}
+                        {{message}}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-3 mt-4"> 
+                <h5>Totol Expense: <span class="badge text-bg-warning"><i class="bi bi-currency-rupee"></i> {{ today.1}}</span></h5>
+              
+            </div>
+            <div class="col-3 mt-3">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2 border border-dark-subtle" type="search" placeholder="Search" aria-label="Search" name="search">
+                    <button class="btn btn-success" type="submit">{% if today.2 %} Clear {%else%}Search{%endif%}</button>
+                  </form>
+            </div>
+        </div>
+    <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="text-center">Date</th>
+            <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Item Name</th>
+            <th scope="col" class="text-center">Item price</th>
+            <th scope="col" class="text-center">Edit</th>
+            <th scope="col" class="text-center">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for dat in e_data%}
+            <tr>
+                <td class="text-center">{{dat.expenser_name.name}}</td>
+                <td class="text-center">{{dat.date}}</td>
+                <td class="text-center">{{dat.item}}</td>
+                <td class="text-center">Rs: {{dat.item_price}}</td>
+                <td class="text-center"><a href="/aeedit/{{dat.id}}"><span class="badge text-bg-Secondary">Edit</span></a></span></td>
+                <td class="text-center"><a href="/aedelete/{{dat.id}}"><span class="badge text-bg-danger">Delete</span></a></span></td>
+          </tr>
+          {% endfor%}
+        </tbody>
+      </table>
+</div>
+</div>
+{%endblock%}

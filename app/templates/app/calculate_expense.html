@@ -1,0 +1,105 @@
+{% extends 'base.html'%}
+
+{%block title%} Calculate Expense {%endblock%}
+
+
+
+
+
+{% block content%}
+
+<div class="container mt-2">
+    <div class="d-flex justify-content-center">
+        <h4>CALCULATE EXPENSE</h4>
+    </div>
+    <div class="row">
+        <div class="col-3 mt-4" >
+            <h5>Totol Expense: <span class="badge text-bg-warning "><i class="bi bi-currency-rupee">{{totol}}</i> </span>
+            </h5>
+        </div>
+        <div class="col-3 mt-4">
+            <h5>Month: <span class="badge text-bg-info">{{month_name}}</span></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 mt-3">
+            <form action="">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control border border-dark-subtle" id="number" value="" name="date"
+                    required>
+        </div>
+        <div class="col-3 mt-5 ">
+            <button class="btn btn-success" type="submit">Search</button>
+            {%if messages%}
+            <span class="badge text-bg-danger ms-3">
+                {%for message in messages%}
+                {{message}}
+                {%endfor%}
+            </span>
+            {%endif%}
+        </div>
+        </form>
+        <div class="col">
+            <form id="myform"  action="" method="post">
+            <div class="d-flex flex-row " style="margin-left: 200px;">
+                <div class="p-2 mt-2">
+                    <label for="electric" class="form-label">Electricity Bill</label>
+                    {%csrf_token%}
+                    <input type="electric" class="form-control border border-dark-subtle" {% if electric_bill %}value={{electric_bill}}{% elif electric_bill_se %}value={{electric_bill_se}}{% else %} value=0{% endif %} id="electric" value=0
+                        name="electric" required>
+            </div>
+                <div class="p-2 mt-2">
+                        <label for="water" class="form-label">Water Expense</label>
+                        {%csrf_token%}
+                        <input type="number" class="form-control border border-dark-subtle" {% if water_bill %}value={{water_bill}}{% elif water_bill_se %}value={{water_bill_se}}{% else %} value=0{% endif %} id="water" value=0
+                            name="water" required>
+                </div>
+                <div class="p-2 mt-2 ">
+                    <label for="food" class="form-label">Food Expense</label>
+                    <input type="number" class="form-control border border-dark-subtle" id="food" {% if food_expense %}value={{food_expense}}{% elif food_bill_se %}value={{food_bill_se}}{% else %} value=0 {% endif %}  name="food"
+                        required>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" class="text-center">Name</th>
+                <th scope="col" class="text-center">Per Day</th>
+                <th scope="col" class="text-center">Per Member</th>
+                <th scope="col" class="text-center">No.of.Days</th>
+                <th scope="col" class="text-center">Amount To Be Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for data,ans,month in room_members%}
+                <tr>
+                    <td class="text-center">{{data.name_of_expenser.name}}</td>
+                    <td class="text-center"><i class="bi bi-currency-rupee"></i>{% if search %}{{data.per_day}}{% else %}{{per_day}}{% endif %}</td>
+                    <td class="text-center"><i class="bi bi-currency-rupee"></i>{% if search %}{{data.Amount_to_be_paid}}{% else %}{{per_member}}{% endif %}</td>
+                    <td class="text-center" style="width: 10%;">
+                        {%csrf_token%}
+                        <input type="number" class="form-control border border-dark-subtle text-center" {% if search %}value="{{data.no_of_days}}" name="{{data.id}}"{% else %}value="{{month}}" name="{{data.id}}"{% endif %} >
+                    </td>
+                    <td class="text-center"><i
+                            class="bi bi-currency-rupee">{% if search %}{{data.Amount_to_be_paid}}{% else %}{{ans}}{% endif %}</i></td>
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+<div class="d-flex flex-row-reverse">
+    <div class="p-2"><button class="btn btn-success" onclick="submitform()">Calculate</button></div>
+</form>
+<div class="p-2"><a href="/calcexpense"><button class="btn btn-success" >Clear</button></a>
+  </div>    
+
+    
+</div>
+<script>
+    function submitform() {
+        document.getElementById('myform').submit();
+    }
+</script>
+{%endblock%}

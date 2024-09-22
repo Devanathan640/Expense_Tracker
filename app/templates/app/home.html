@@ -1,0 +1,60 @@
+
+{%extends 'base.html'%}
+{% load static %}
+{% load custom_filters %}
+{% block title%} {% endblock %}
+{% block content %}
+
+
+<h1 class="text-center mt-2" style=" font-family: Courier Prime, monospace;font-weight: 600;font-style: normal;">{{month_name |upper}} {{"month bill"|upper}}</h1>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row w-100">
+        <!-- Left Side Container -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body text-center border border-dark rounded" style="font-family: Fascinate Inline, system-ui; font-weight: 400;font-style: normal;font-size:40px"><img src="{% static "images/totol_icon.gif" %}" alt=""  width="50" height="50" class="mb-2 me-2">Totol Amount: <i class="bi bi-currency-rupee"></i>{{totol}}</div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body text-center border border-dark rounded" style="font-family: Fascinate Inline, system-ui; font-weight: 400;font-style: normal;font-size:40px"><img src="{% static "images/water_icon.gif" %}" alt=""  width="50" height="50" class="mb-2 me-2">Water Bill: <i class="bi bi-currency-rupee"></i>{{water}}</div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body text-center border border-dark rounded" style="font-family: Fascinate Inline, system-ui; font-weight: 400;font-style: normal;font-size:40px"><img src="{% static "images/food_icon.gif" %}" alt=""  width="50" height="50" class="mb-2 me-2">Food Bill: <i class="bi bi-currency-rupee"></i>{{food}}</div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body text-center border border-dark rounded" style="font-family: Fascinate Inline, system-ui; font-weight: 400;font-style: normal;font-size:40px"><img src="{% static "images/electricity_icon.gif" %}" alt=""  width="50" height="50" class="mb-2 me-2">Electric Bill: <i class="bi bi-currency-rupee"></i>{{electric}}</div>
+            </div>
+        </div>
+
+        <!-- Right Side Container -->
+        <div class="col-md-6">
+            <table class="table table-striped text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Room members</th>
+                        <th>Amount to be paid</th>
+                        <th>Purchase amount</th>
+                        <th>Totol amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dat in  room_members%}
+                    <tr>
+                        <td>{{dat.name_of_expenser.name| upper}}</td>
+                        <td>{{dat.Amount_to_be_paid}}</td>
+                        <td>{% if final|get_item:dat.name_of_expenser.name %} {{final|get_item:dat.name_of_expenser.name|get_item:"Purchase_Amount"}} {% else %} 0 {% endif %}</td>
+                        <td>{% if final|get_item:dat.name_of_expenser.name %} {{final|get_item:dat.name_of_expenser.name|get_item:"Totol_Amount"}} {% else %} {{dat.Amount_to_be_paid}} {% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                    
+        
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}
