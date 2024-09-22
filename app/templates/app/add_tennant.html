@@ -1,0 +1,57 @@
+{% extends 'base.html'%}
+
+{%block title%} Add Tennant {%endblock%}
+
+{% block content%}
+{% load static%}
+<div class="container mt-4">
+    <form {% if edit_data %}action="/{{edit_data.id}}"{%else%} action=""{% endif %} method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-4">
+                    <label for ="name" class="form-label">Name</label>
+                    <input type="text" class="form-control border border-dark-subtle" id="name" value="{{edit_data.name}}" name="name" required>
+                </div>
+            <div class="col-4"> 
+                    <label for ="phone" class="form-label">Phone number</label>
+                    <input type="text" class="form-control border border-dark-subtle" id="number"  value="{{edit_data.phone_number}}" name="phone" required>
+            </div>
+            
+            <div class="row">
+                <div class="col-4 mt-4"> 
+                    <input type="submit" class="btn btn-info" value="Submit">
+            </div>
+            {%if messages%}
+            <div class="col-2 mt-4 text-danger " role="alert"> 
+                    {%for message in messages%}
+                        {{message}}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+    </form>
+    <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="text-center">Join Date</th>
+            <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Phone Number</th>
+            <th scope="col" class="text-center">Edit</th>
+            <th scope="col" class="text-center">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for ten in tan%}
+            <tr>
+                <td class="text-center">{{ten.date}}</td>
+                <td class="text-center">{{ten.name}}</td>
+                <td class="text-center">{{ten.phone_number}}</td>
+                <td class="text-center"><a href="/tennantedit/{{ten.id}}"><span class="badge text-bg-Secondary">Edit</span></a></span></td>
+                <td class="text-center"><a href="/tennantdelete/{{ten.id}}"><span class="badge text-bg-danger">Delete</span></a></span></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+</div>
+
+{%endblock%}
